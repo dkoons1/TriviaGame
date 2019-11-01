@@ -1,91 +1,148 @@
 
 $(document).ready(function() {
-
+var i = 0;
+var check = 0;
 var intervalId;
-var a = 0;
-var answered = 0;
-var x = $("#Button");
-var y = $("#Questions");
-y.hide();
-var z = $("#Submit");
-z.hide();
-var seconds = 50;
+var seconds;
+var a;
+var startButton = $("#startButton");
+var questionArea = $("#Questions");
+var promptArea = $("#prompt")
+var answer = $("#answer")
+var grats = $("grats")
 var score = 0;
-var questions = [
-    {
-    prompt: "What is this?",
-    answers: ["dog", "frog", "chicken"],
-    answer: 0
-    },
-    {
-    prompt: "What is this?",
-    answers: ["dog", "frog", "chicken"],
+grats.hide();
+questionArea.hide();
+
+var questionObj = [
+{
+    question: "What house at Hogwarts does Harry belong to?",
+    answers: ["Hufflepuff", "Gryffindor", "Ravenclaw", "Slytherin"],
     answer: 1
-    },
-    {
-    prompt: "What is this?",
-    answers: ["dog", "frog", "chicken"],
+},
+{
+    question: "What position does Harry play on his Quidditch team?",
+    answers: ["Keeper", "Bludger", "Seeker", "Chaser"],
+    answer: 2
+},
+{
+    question: "Which of the Weasleys went to Romania to study dragons?",
+    answers: ["Charlie", "George", "Fred", "Percy"],
     answer: 0
-    }
-];
+},
+{
+    question: "In what month is Harry Potter's birthday?",
+    answers: ["November", "July", "June", "December"],
+    answer: 1
+},
+{
+    question: "The crowing of which animal is fatal to a Basilisk?",
+    answers: ["Toad", "Chicken", "Spider", "Rooster"],
+    answer: 3
+},
+{
+    question: "Which language, like Voldemort, is Harry able to speak?",
+    answers: ["Mermish", "Parseltongue", "Elfish", "German"],
+    answer: 2
+},
+{
+    question: "What did James Potter's school friends nickname him?",
+    answers: ["Padfoot", "Prongs", "Mooney", "Wormtail"],
+    answer: 1
+},
+{
+    question: "Which device enabled Hermione to attend three classes at once in her third year?",
+    answers: ["Rememberall", "Time-turner", "Philosopher's Stone", "Sneakoscope"],
+    answer: 3
+}]
 
-function start(){
-    x.remove();
-    y.show();
-    z.show();
-    game();
-}
+var questionCount = 8;
 
-x.on("click", function() {
-    start();
-    clearInterval(intervalId);
+startButton.on("click", function(){
+    startButton.hide();
+    questionArea.show();
     intervalId = setInterval(decrement, 1000);
-});
+    
+    game();
+})
+
+function game(){
+    seconds = 10;
+    check = 0;
+    $("#gratsPrompt").text("")
+    console.log(questionObj[i].question)
+    promptArea.text(questionObj[i].question)
+    for(var j = 0; j < questionObj[i].answers.length; j++){
+        a = $("<button>" + questionObj[i].answers[j] + "</button>")
+        // a.attr("type", "button")
+        a.attr("id", "answer")
+        a.attr("name", "answer")
+        a.attr("value", j)
+        promptArea.append(a)
+        
+        console.log(a.val())
+        a.on("click", function(){
+            questionCount--
+            if($(this).val() == questionObj[i].answer){
+                alert("Hey")
+                score++;
+                i++;
+                game();
+                gratsScreen();
+           
+            }
+            else if (questionCount == 0){
+                end()
+            }
+            else{
+                alert("no")
+                i++;
+                loseScreen();
+                //game();
+            }
+        })
+    }
+}
 
 function decrement() {
     seconds--;
     $("#Timer").html(seconds);
-    if (seconds === 0) {
-
-      hey();
+    if(check == 1){
+        if (seconds === 0) {
+            game()
+          }
+    }
+    else if (check == 0){
+        if (seconds === 0) {
+            outOfTimeScreen()
+          }
     }
   }
 
-function game(){
-    for(var i = 0; i < questions.length; i++){
-        answered = questions.answer
-        y.append($("<h1>" + questions[i].prompt + "</h1>"))
-        for(var j = 0; j < questions[i].answers.length; j++){
-            a = $("<input>" + questions[i].answers[j] + "</input>")
-            a.attr("id", "answer")
-            a.attr("type", "radio")
-            a.attr("value", j)
-            y.append($(a))
-
-        }
-
-    } 
-
-    $('#answer').on("click", submit())  
-
+function gratsScreen(){
+    check = 1;
+    seconds = 5;
+    promptArea.text("CONGRATS")
+    $("#gratsPrompt").text("You got the question right!")
+    // intervalId = setInterval(decrement, 1000);
 }
 
-
-
-function submit(){
-    console.log(answered)
-    console.log($(this).val())
-    if($(this).val() == questions[answered].answer){
-        alert("yes")
-    }
-    else{
-        alert("no")
-    }
+function loseScreen(){
+    check = 1;
+    seconds = 5;
+    promptArea.text("You got it wrong!")
 }
 
-function hey(){
-    alert("hey" + score);
-    clearInterval(intervalId);
+function outOfTimeScreen(){
+    check = 1;
+    seconds = 5;
+    i+=1;
+    promptArea.text("You ran out of time!")
 }
 
+function end(){
+    clearInterval(intervalId)
+    promptArea.text("you got " + score + " right! Good job!")
+}
+console.log(check)
 })
