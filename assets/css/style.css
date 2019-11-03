@@ -3,12 +3,41 @@ html{
 }
 
 body{
-	background: lightblue;
+	background: #FFD088;
 }
 
-gameArea{
-	width: 960px;
+#gameArea{
+    width: 960px;
+    text-align: center;
 	margin-left: auto;
 	margin-right: auto;
 }
 
+#TitleArea{
+    background: #87EBF7;
+    padding: 15px;
+    border: 5px solid blue;
+}
+
+#startButton{
+
+}
+
+#timeArea{
+    background: #87EBF7;
+    padding: 15px;
+    border: 5px solid blue;
+}
+
+#startButton{
+    margin-top: 25px;
+    background: #87EBF7;
+    padding: 15px;
+    border: 5px solid blue;
+}
+
+#questionHolder{
+    background: #87EBF7;
+    padding: 15px;
+    border: 5px solid blue;
+}
